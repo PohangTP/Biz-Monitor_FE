@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls /Users/tnals/Desktop/ 2>/dev/null | head -30 && echo \"---\" && wc -l /Users/tnals/Desktop/index.html 2>/dev/null)",
+      "Read(//Users/tnals/Desktop/**)",
+      "Bash(yes)",
+      "Bash(npx --yes create-react-app@latest pms-frontend --use-npm)"
+    ]
+  }
+}
