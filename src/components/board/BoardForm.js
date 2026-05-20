@@ -1,0 +1,87 @@
+import { useRef, useState } from 'react';
+import styled from 'styled-components';
+import { Card, CardHeader } from '../ui/Card';
+import { FormGroup, FormRow, FormLabel } from '../ui/FormGroup';
+import { FormInput } from '../ui/FormInput';
+import Textarea from '../ui/Textarea';
+import { BtnSmPrimary } from '../ui/BtnSm';
+import ScopeSelect, { getDefaultScope } from '../ui/ScopeSelect';
+import { useAuth } from '../../hooks/useAuth';
+
+const BottomRow = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+const BoardForm = ({ onSubmitting, onSubmitted, submitting }) => {
+  const { user } = useAuth();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [scope, setScope] = useState(() => getDefaultScope(user));
+  const fileInputRef = useRef(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const files = fileInputRef.current?.files
+      ? Array.from(fileInputRef.current.files)
+      : [];
+    const ok = await onSubmitting({
+      title,
+      content,
+      targetScope: scope,
+      files,
+    });
+    if (ok) {
+      setTitle('');
+      setContent('');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      onSubmitted?.();
+    }
+  };
+
+  return (
+    <Card as="form" onSubmit={handleSubmit}>
+      <CardHeader title="새 글 작성" />
+      <FormGroup>
+        <FormInput
+          type="text"
+          placeholder="제목을 입력하세요"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Textarea
+          rows={4}
+          placeholder="내용을 입력하세요..."
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        />
+      </FormGroup>
+      <FormRow>
+        <FormGroup>
+          <FormLabel>게시 대상</FormLabel>
+          <ScopeSelect value={scope} onChange={setScope} />
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>첨부 파일 (선택, 여러 개 가능)</FormLabel>
+          <FormInput
+            ref={fileInputRef}
+            type="file"
+            multiple
+            style={{ padding: '6px' }}
+          />
+        </FormGroup>
+      </FormRow>
+      <BottomRow>
+        <BtnSmPrimary type="submit" disabled={submitting}>
+          {submitting ? '게시 중...' : '게시하기'}
+        </BtnSmPrimary>
+      </BottomRow>
+    </Card>
+  );
+};
+
+export default BoardForm;

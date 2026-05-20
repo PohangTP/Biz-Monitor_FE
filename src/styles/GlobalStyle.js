@@ -1,34 +1,34 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
-  *{box-sizing:border-box;margin:0;padding:0}
+  *{margin:0;padding:0;box-sizing:border-box}
 
   body{
     font-family:${({ theme }) => theme.font.sans};
     background:${({ theme }) => theme.colors.bg};
-    color:${({ theme }) => theme.colors.tx};
-    font-size:14px;
-    line-height:1.6;
+    color:${({ theme }) => theme.colors.text};
     min-height:100vh;
+    overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
   }
 
   a{color:inherit;text-decoration:none}
+  button{font-family:inherit}
+  input,select,textarea{font-family:inherit}
 
-  @keyframes pulse{
-    0%,100%{box-shadow:0 0 0 3px rgba(5,150,105,0.15)}
-    50%{box-shadow:0 0 0 7px rgba(5,150,105,0.04)}
-  }
-  @keyframes shimmer{
-    0%{background-position:200% 0}
-    100%{background-position:-200% 0}
-  }
-  @keyframes badge{
-    0%,100%{opacity:1}
-    50%{opacity:.6}
-  }
-  @keyframes fade-up{
-    from{opacity:0;transform:translateY(10px)}
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(-4px)}
     to{opacity:1;transform:translateY(0)}
+  }
+  @keyframes slideUp{
+    from{opacity:0;transform:translateY(24px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  @keyframes slideInRight{
+    from{transform:translateX(100%);opacity:0}
+    to{transform:translateX(0);opacity:1}
+  }
+  @keyframes spin{
+    to{transform:rotate(360deg)}
   }
 `;
